@@ -12,6 +12,8 @@
 
 Search millions of photographs through a fast, responsive, and accessible interface powered by the Unsplash API.
 
+![Luma live interface](docs/luma-live-preview.jpg)
+
 </div>
 
 ---
