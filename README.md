@@ -8,6 +8,7 @@
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=111)
 ![Unsplash](https://img.shields.io/badge/API-Unsplash-111111?style=for-the-badge&logo=unsplash&logoColor=white)
+[![Quality](https://github.com/deleted04user/LUMA/actions/workflows/quality.yml/badge.svg)](https://github.com/deleted04user/LUMA/actions/workflows/quality.yml)
 
 Search millions of photographs through a fast, responsive, and accessible interface powered by the Unsplash API.
 
@@ -40,15 +41,15 @@ The project began as a simple classroom image-search exercise and has been rebui
 
 ## Preview
 
-Open `index.html` in a browser or start a small local server. The search interface will ask for an Unsplash Access Key the first time it needs live results.
+[Open the live GitHub Pages demo](https://deleted04user.github.io/LUMA/). The search interface asks for an Unsplash Access Key the first time it needs live results; the key stays in the browser.
 
 ## Getting Started
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/deleted04user/webEmsi.git
-cd webEmsi
+git clone https://github.com/deleted04user/LUMA.git
+cd LUMA
 ```
 
 ### 2. Start a local server
@@ -78,11 +79,14 @@ Then add your Access Key to `config.js`. This file is ignored by Git.
 ## Project Structure
 
 ```text
-webEmsi/
+LUMA/
+├── assets/favicon.svg # Project favicon
 ├── index.html          # Semantic application structure
 ├── style.css           # Responsive visual system and states
 ├── script.js           # Search, filters, rendering, and settings
 ├── config.example.js   # Optional local configuration template
+├── tests/smoke.mjs     # Dependency-free structural smoke checks
+├── LICENSE
 ├── .gitignore
 └── README.md
 ```
@@ -126,6 +130,13 @@ Review the latest [Unsplash API Guidelines](https://help.unsplash.com/en/collect
 - User-provided text is rendered through DOM APIs rather than HTML interpolation.
 - External links use `noopener noreferrer`.
 
+## Verification
+
+```bash
+node --check script.js
+node tests/smoke.mjs
+```
+
 ## Future Improvements
 
 - [ ] Add color filtering
@@ -133,8 +144,9 @@ Review the latest [Unsplash API Guidelines](https://help.unsplash.com/en/collect
 - [ ] Add a fullscreen photo detail dialog
 - [ ] Add shareable search URLs
 - [ ] Add favorites stored locally
-- [ ] Add automated accessibility and browser tests
-- [ ] Deploy a public demonstration
+- [x] Add automated structural and secret-safety smoke checks
+- [x] Deploy a public demonstration with GitHub Pages
+- [ ] Add full automated accessibility and browser tests
 
 ## Credits
 
@@ -143,3 +155,7 @@ Photography and search data are provided by [Unsplash](https://unsplash.com/?utm
 ## Disclaimer
 
 This is an educational front-end project and is not affiliated with or endorsed by Unsplash.
+
+## License
+
+Released under the [MIT License](LICENSE).
