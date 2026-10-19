@@ -1,0 +1,20 @@
+services:
+  luma:
+    build: .
+    ports:
+      - "127.0.0.1:${PORT:-8000}:8000"
+    environment:
+      PORT: "8000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 64
+    mem_limit: 256m
+    cpus: 1
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, node, tools/healthcheck.mjs]
+      interval: 5s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
