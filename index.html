@@ -1,133 +1,192 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore high-quality photography through a fast, accessible Unsplash search experience.">
-    <meta name="theme-color" content="#0b0d10">
-    <meta property="og:title" content="Luma — Discover remarkable photography">
-    <meta property="og:description" content="A fast, responsive, and accessible Unsplash discovery experience.">
-    <meta property="og:type" content="website">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore high-quality photography through a fast, accessible Unsplash search experience."
+    />
+    <meta name="theme-color" content="#0b0d10" />
+    <meta property="og:title" content="Luma — Discover remarkable photography" />
+    <meta
+      property="og:description"
+      content="A fast, responsive, and accessible Unsplash discovery experience."
+    />
+    <meta property="og:type" content="website" />
     <title>Luma — Discover remarkable photography</title>
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-    <link rel="preconnect" href="https://images.unsplash.com">
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="style.css" />
     <script src="config.js" defer onerror="window.LUMA_CONFIG = window.LUMA_CONFIG || {}"></script>
-    <script src="script.js" defer></script>
-</head>
-<body>
+    <script src="script.js" type="module"></script>
+  </head>
+  <body>
     <a class="skip-link" href="#results">Skip to results</a>
 
     <header class="site-header">
-        <a class="brand" href="#" aria-label="Luma home">
-            <span class="brand-mark" aria-hidden="true">L</span>
-            <span>Luma</span>
-        </a>
+      <a class="brand" href="#" aria-label="Luma home">
+        <span class="brand-mark" aria-hidden="true">L</span>
+        <span>Luma</span>
+      </a>
 
-        <nav class="header-actions" aria-label="Site controls">
-            <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch to light theme" title="Change theme">
-                <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.41M17.66 6.34l1.41-1.41"></path></svg>
-                <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
-            </button>
-            <button class="settings-button" id="settings-button" type="button">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"></path><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.95 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.6 8.95a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.95 4.6 1.7 1.7 0 0 0 9.98 3H10V3h4v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15z"></path></svg>
-                <span>API setup</span>
-            </button>
-        </nav>
+      <nav class="header-actions" aria-label="Site controls">
+        <button
+          class="icon-button"
+          id="theme-toggle"
+          type="button"
+          aria-label="Switch to light theme"
+          title="Change theme"
+        >
+          <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path
+              d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.41M17.66 6.34l1.41-1.41"
+            ></path>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path>
+          </svg>
+        </button>
+        <button class="settings-button" id="settings-button" type="button" aria-label="API setup">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"></path>
+            <path
+              d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.95 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.6 8.95a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.95 4.6 1.7 1.7 0 0 0 9.98 3H10V3h4v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15z"
+            ></path>
+          </svg>
+          <span>API setup</span>
+        </button>
+      </nav>
     </header>
 
     <main>
-        <section class="search-stage" aria-labelledby="page-title">
-            <p class="eyebrow">Curated by curiosity</p>
-            <h1 id="page-title">Find the image<br>you had in mind.</h1>
-            <p class="intro">Search millions of freely usable photographs from creators around the world.</p>
+      <section class="search-stage" aria-labelledby="page-title">
+        <p class="eyebrow">Curated by curiosity</p>
+        <h1 id="page-title">Find the image<br />you had in mind.</h1>
+        <p class="intro">Search millions of freely usable photographs from creators around the world.</p>
 
-            <form class="search-form" id="search-form" role="search">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
-                <label class="sr-only" for="search-box">Search photographs</label>
-                <input id="search-box" name="query" type="search" placeholder="Try “Moroccan architecture”" autocomplete="off" spellcheck="false" required>
-                <button type="submit">Search</button>
-            </form>
+        <form class="search-form" id="search-form" role="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+          </svg>
+          <label class="sr-only" for="search-box">Search photographs</label>
+          <input
+            id="search-box"
+            name="query"
+            type="search"
+            placeholder="Try “Moroccan architecture”"
+            autocomplete="off"
+            spellcheck="false"
+            required
+          />
+          <button type="submit">Search</button>
+        </form>
 
-            <div class="suggestions" aria-label="Popular searches">
-                <span>Explore</span>
-                <button type="button" data-query="Morocco">Morocco</button>
-                <button type="button" data-query="Architecture">Architecture</button>
-                <button type="button" data-query="Technology">Technology</button>
-                <button type="button" data-query="Nature">Nature</button>
-            </div>
-        </section>
+        <div class="suggestions" aria-label="Popular searches">
+          <span>Explore</span>
+          <button type="button" data-query="Morocco">Morocco</button>
+          <button type="button" data-query="Architecture">Architecture</button>
+          <button type="button" data-query="Technology">Technology</button>
+          <button type="button" data-query="Nature">Nature</button>
+        </div>
+      </section>
 
-        <section class="gallery-section" id="results" aria-labelledby="results-title" tabindex="-1">
-            <div class="results-toolbar">
-                <div>
-                    <p class="section-kicker">Photo collection</p>
-                    <h2 id="results-title">Ready when you are</h2>
-                </div>
-                <div class="filters" id="filters" hidden>
-                    <label>
-                        <span>Orientation</span>
-                        <select id="orientation-filter">
-                            <option value="">Any</option>
-                            <option value="landscape">Landscape</option>
-                            <option value="portrait">Portrait</option>
-                            <option value="squarish">Square</option>
-                        </select>
-                    </label>
-                    <label>
-                        <span>Sort</span>
-                        <select id="sort-filter">
-                            <option value="relevant">Relevant</option>
-                            <option value="latest">Latest</option>
-                        </select>
-                    </label>
-                </div>
-            </div>
+      <section class="gallery-section" id="results" aria-labelledby="results-title" tabindex="-1">
+        <div class="results-toolbar">
+          <div>
+            <p class="section-kicker">Photo collection</p>
+            <h2 id="results-title">Ready when you are</h2>
+          </div>
+          <div class="filters" id="filters" hidden>
+            <label>
+              <span>Orientation</span>
+              <select id="orientation-filter">
+                <option value="">Any</option>
+                <option value="landscape">Landscape</option>
+                <option value="portrait">Portrait</option>
+                <option value="squarish">Square</option>
+              </select>
+            </label>
+            <label>
+              <span>Sort</span>
+              <select id="sort-filter">
+                <option value="relevant">Relevant</option>
+                <option value="latest">Latest</option>
+              </select>
+            </label>
+          </div>
+        </div>
 
-            <div class="status-panel" id="status-panel">
-                <div class="status-art" aria-hidden="true">
-                    <span></span><span></span><span></span>
-                </div>
-                <h3>Start with an idea</h3>
-                <p>Search by subject, place, color, mood, or anything you can imagine.</p>
-            </div>
+        <div class="status-panel" id="status-panel" role="status" aria-live="polite">
+          <div class="status-art" aria-hidden="true"><span></span><span></span><span></span></div>
+          <h3>Start with an idea</h3>
+          <p>Search by subject, place, color, mood, or anything you can imagine.</p>
+        </div>
 
-            <div class="gallery" id="search-result" aria-live="polite"></div>
-            <div class="load-more-wrap">
-                <button class="load-more" id="show-more-btn" type="button" hidden>
-                    <span>Load more photos</span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                </button>
-            </div>
-        </section>
+        <div class="gallery" id="search-result" aria-live="polite"></div>
+        <div class="load-more-wrap">
+          <button class="load-more" id="show-more-btn" type="button" hidden>
+            <span>Load more photos</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+        </div>
+      </section>
     </main>
 
     <footer>
-        <a class="brand footer-brand" href="#">Luma</a>
-        <p>Photography provided by <a href="https://unsplash.com/?utm_source=luma_search&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a>.</p>
-        <p class="footer-note">Built by <a href="https://github.com/deleted04user" target="_blank" rel="noopener noreferrer">Oussama Oulkaid</a>.</p>
+      <a class="brand footer-brand" href="#">Luma</a>
+      <p>
+        Photography provided by
+        <a
+          href="https://unsplash.com/?utm_source=luma_search&utm_medium=referral"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Unsplash</a
+        >.
+      </p>
+      <p class="footer-note">
+        Built by
+        <a href="https://github.com/deleted04user" target="_blank" rel="noopener noreferrer"
+          >Oussama Oulkaid</a
+        >.
+      </p>
     </footer>
 
     <dialog class="settings-dialog" id="settings-dialog" aria-labelledby="settings-title">
-        <form method="dialog" class="dialog-card" id="settings-form">
-            <button class="dialog-close" value="cancel" aria-label="Close settings" type="submit">×</button>
-            <p class="section-kicker">One-time setup</p>
-            <h2 id="settings-title">Connect Unsplash</h2>
-            <p>Enter your Unsplash Access Key to enable live image search. It stays in this browser and is never sent anywhere except the Unsplash API.</p>
+      <form method="dialog" class="dialog-card" id="settings-form">
+        <button class="dialog-close" aria-label="Close settings" type="button">×</button>
+        <p class="section-kicker">One-time setup</p>
+        <h2 id="settings-title">Connect Unsplash</h2>
+        <p>
+          Enter your Unsplash Access Key to enable live image search. It stays in this browser and is never
+          sent anywhere except the Unsplash API.
+        </p>
 
-            <label class="key-field" for="access-key">
-                <span>Access Key</span>
-                <input id="access-key" type="password" autocomplete="off" placeholder="Paste your Unsplash Access Key">
-            </label>
+        <label class="key-field" for="access-key">
+          <span>Access Key</span>
+          <input
+            id="access-key"
+            type="password"
+            autocomplete="off"
+            placeholder="Paste your Unsplash Access Key"
+          />
+        </label>
 
-            <p class="dialog-help">Get a key from <a href="https://unsplash.com/developers" target="_blank" rel="noopener noreferrer">Unsplash Developers</a>. Do not enter your Secret Key.</p>
-            <div class="dialog-actions">
-                <button class="secondary-button" id="clear-key" type="button">Remove saved key</button>
-                <button class="primary-button" value="save" type="submit">Save and continue</button>
-            </div>
-        </form>
+        <p class="dialog-help">
+          Get a key from
+          <a href="https://unsplash.com/developers" target="_blank" rel="noopener noreferrer"
+            >Unsplash Developers</a
+          >. Do not enter your Secret Key.
+        </p>
+        <div class="dialog-actions">
+          <button class="secondary-button" id="clear-key" type="button">Remove saved key</button>
+          <button class="primary-button" value="save" type="submit">Save and continue</button>
+        </div>
+      </form>
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-</body>
+  </body>
 </html>
