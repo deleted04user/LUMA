@@ -11,4 +11,8 @@ Use Node.js 24.15+ in the 24 LTS series, or Node.js 26+. Start from a clean clon
 
 Never commit `config.js`, `.env`, real keys, generated `dist/`, test reports, or `node_modules/`. Tests use mock responses and must not call Unsplash. Runtime production code remains framework-free; new development dependencies must be justified, pinned, and accompanied by a lockfile update.
 
-`npm run check` enforces linting, formatting, and minimum coverage of the app modules. Do not lower coverage thresholds to accommodate untested behavior. CI also checks clean installs/builds on Linux and Windows, all configured browser projects, a dependency audit, and the container. Review CI failures before merging.
+`npm run check` enforces linting, strict JSDoc type checking, formatting, app-module coverage, and deployment policies. `npm run typecheck` checks the browser modules and entry script without emitting or converting JavaScript. Update `src/types.d.ts` and the compile-time contract tests when public types change. Do not lower coverage thresholds to accommodate untested behavior.
+
+Run `docker compose config --quiet` for Compose edits and `kubectl kustomize k8s/base` for Kubernetes edits. Add a negative policy test when a deployment safeguard changes. Follow [DEPLOYMENT.md](docs/DEPLOYMENT.md) for running the complete deployment tests. CI checks clean installs/builds on Linux and Windows, all browser projects, dependency audits, restricted Compose startup, and a real Kubernetes rollout in an ephemeral kind cluster. Review CI failures before merging.
+
+Dependabot checks the npm toolchain, GitHub Actions, and Docker images weekly. Review these updates with the same checks as any other change; updates are not merged automatically.

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Make lint, typecheck, tests, deployment policies, and audits explicit in CI; add temporary Kubernetes rollout checks.
+- Configure weekly Dependabot updates and document project type, architecture, operations, and all environment variables.
+- Add an optional Kustomize deployment with restricted pods, resource budgets, probes, and deployment-policy regression tests.
+- Add one-command Docker Compose startup with health checks, a read-only filesystem, and restricted container privileges.
+- Add asset readiness checks, validated port configuration, structured request logs, and restrictive server response headers.
+- Check browser modules and the entry script with strict TypeScript/JSDoc contracts and validate required DOM controls.
+- Handle non-Error network rejections and reject malformed optional photo metadata.
+
 - Separate API, search state, rendering, configuration, and settings into testable modules.
 - Prevent stale responses from replacing a newer search and retry failed pagination without skipping a page.
 - Return structured API errors, validate response data, and restrict download tracking to Unsplash endpoints.

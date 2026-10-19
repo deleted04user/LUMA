@@ -1,8 +1,13 @@
+/** @param {string} query */
 export function normalizeQuery(query) {
     return query.trim().replace(/\s+/g, " ");
 }
 
+/**
+ * @param {{fetchPhotos: (query: string, options: import("./types.js").SearchOptions) => Promise<import("./types.js").ApiResult<import("./types.js").SearchData>>, onChange: (state: import("./types.js").SearchState) => void}} options
+ */
 export function createSearchController({ fetchPhotos, onChange }) {
+    /** @type {import("./types.js").SearchState} */
     let state = {
         query: "",
         page: 0,
@@ -15,13 +20,16 @@ export function createSearchController({ fetchPhotos, onChange }) {
         append: false,
         error: null,
     };
+    /** @type {AbortController | undefined} */
     let controller;
     let revision = 0;
+    /** @param {Partial<import("./types.js").SearchState>} changes */
     const update = (changes) => {
         state = { ...state, ...changes };
         onChange({ ...state });
     };
 
+    /** @param {number} page @param {boolean} append */
     async function requestPage(page, append) {
         controller?.abort();
         controller = new AbortController();
@@ -48,6 +56,7 @@ export function createSearchController({ fetchPhotos, onChange }) {
         });
     }
 
+    /** @param {string} query @param {Partial<import("./types.js").SearchFilters>} [filters] */
     function search(query, filters = {}) {
         const cleaned = normalizeQuery(query);
         if (!cleaned) return Promise.resolve(false);

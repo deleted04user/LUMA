@@ -25,7 +25,16 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run check
+      - name: Lint
+        run: npm run lint
+      - name: Check JSDoc types
+        run: npm run typecheck
+      - name: Check formatting
+        run: npm run format:check
+      - name: Test and enforce coverage
+        run: npm test
+      - name: Validate deployment policies
+        run: npm run deployment:check
       - run: npm run build
       - run: npm audit --audit-level=high
 
@@ -54,11 +63,57 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - run: docker build -t luma-test .
-      - run: docker run --detach --name luma --publish 127.0.0.1:8000:8000 luma-test
-      - run: curl --fail --retry 10 --retry-all-errors --retry-delay 1 http://127.0.0.1:8000/
-      - run: curl --fail http://127.0.0.1:8000/src/api.js
-      - run: docker logs luma
+      - run: docker compose config --quiet
+      - run: docker compose up --build --wait --wait-timeout 120
+      - run: curl --fail http://127.0.0.1:8000/healthz
+      - run: docker compose exec -T luma node tools/healthcheck.mjs
+      - name: Verify non-root and read-only operation
+        run: |
+          docker compose exec -T luma node --input-type=module -e '
+            import assert from "node:assert/strict";
+            import { writeFileSync } from "node:fs";
+            assert.notEqual(process.getuid(), 0);
+            assert.throws(() => writeFileSync("/app/write-test", "blocked"), /EROFS|EACCES/);
+          '
+      - run: docker compose logs
         if: failure()
-      - run: docker rm --force luma
+      - run: docker compose down --remove-orphans
+        if: always()
+
+  kubernetes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install pinned cluster tools and verify checksums
+        run: |
+          curl --fail --location https://github.com/kubernetes-sigs/kind/releases/download/v0.33.0/kind-linux-amd64 --output /tmp/luma-kind
+          echo 'aee6151561422756b764a4ae28e7f44cda5af5a9eead3cc9985112b1de8d8e0d  /tmp/luma-kind' | sha256sum --check
+          sudo install --mode=0755 /tmp/luma-kind /usr/local/bin/kind
+          curl --fail --location https://dl.k8s.io/release/v1.36.4/bin/linux/amd64/kubectl --output /tmp/luma-kubectl
+          echo '8b8f088da2dab964f853b38464033b1be15ede2839eca751482357c45abdd05a  /tmp/luma-kubectl' | sha256sum --check
+          sudo install --mode=0755 /tmp/luma-kubectl /usr/local/bin/kubectl
+      - run: docker build -t luma:local .
+      - run: kind create cluster --name luma-ci --image kindest/node:v1.36.4@sha256:099e049362a1526b2db71494e1947aae99bd16290d7c895f2b7ea312e3cbfaed --wait 90s
+      - run: kind load docker-image luma:local --name luma-ci
+      - run: kubectl apply -f k8s/base/namespace.yaml
+      - name: Validate against the Kubernetes API
+        run: kubectl apply --dry-run=server --validate=strict -k k8s/base
+      - run: kubectl apply -k k8s/base
+      - run: kubectl -n luma rollout status deployment/luma --timeout=120s
+      - name: Verify ready replicas and service traffic
+        run: |
+          test "$(kubectl -n luma get deployment luma -o jsonpath='{.status.readyReplicas}')" = '2'
+          kubectl -n luma exec deployment/luma -- node tools/healthcheck.mjs
+          kubectl -n luma port-forward service/luma 18080:80 > /tmp/luma-forward.log 2>&1 &
+          curl --fail --retry 10 --retry-all-errors --retry-delay 1 http://127.0.0.1:18080/healthz | jq --exit-status '.status == "ok"'
+          curl --fail http://127.0.0.1:18080/ --output /tmp/luma-index.html
+          grep --quiet '<title>Luma' /tmp/luma-index.html
+      - name: Collect diagnostics
+        if: failure()
+        run: |
+          kubectl -n luma get pods
+          kubectl -n luma describe pods
+          kubectl -n luma logs deployment/luma --all-pods=true
+      - run: kind delete cluster --name luma-ci
         if: always()

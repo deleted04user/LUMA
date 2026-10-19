@@ -88,6 +88,7 @@ test("HTML uses modules, accessible live status, and no embedded API credentials
     assert.match(html, /<title>Luma/);
     assert.match(html, /id="search-form"/);
     assert.match(html, /src="script.js" type="module"/);
+    assert.doesNotMatch(html, /\bon(?:error|load|click)=/);
     assert.match(html, /id="status-panel" role="status" aria-live="polite"/);
     for (const file of [
         "script.js",

@@ -2,28 +2,9 @@ import { fetchPhotos, trackDownload } from "./src/api.js";
 import { createRenderer, renderStatus } from "./src/render.js";
 import { createSearchController, normalizeQuery } from "./src/search.js";
 import { initializeSettings } from "./src/settings.js";
+import { getElements } from "./src/dom.js";
 
-const elements = { document: document.documentElement };
-for (const [name, id] of Object.entries({
-    form: "search-form",
-    input: "search-box",
-    gallery: "search-result",
-    status: "status-panel",
-    resultsTitle: "results-title",
-    filters: "filters",
-    orientation: "orientation-filter",
-    sort: "sort-filter",
-    loadMore: "show-more-btn",
-    themeToggle: "theme-toggle",
-    settingsButton: "settings-button",
-    settingsDialog: "settings-dialog",
-    settingsForm: "settings-form",
-    accessKey: "access-key",
-    clearKey: "clear-key",
-    toast: "toast",
-})) {
-    elements[name] = document.getElementById(id);
-}
+const elements = getElements(document);
 
 const settings = initializeSettings(elements, {
     onSave: () => {
@@ -64,6 +45,7 @@ function showConfigurationStatus() {
     }
 }
 
+/** @param {string} query */
 function startSearch(query) {
     const cleaned = normalizeQuery(query);
     if (!cleaned) {
@@ -79,8 +61,8 @@ elements.form.addEventListener("submit", (event) => {
     event.preventDefault();
     startSearch(elements.input.value);
 });
-document.querySelectorAll("[data-query]").forEach((button) => {
-    button.addEventListener("click", () => startSearch(button.dataset.query));
+document.querySelectorAll("button[data-query]").forEach((button) => {
+    button.addEventListener("click", () => startSearch(button.getAttribute("data-query") || ""));
 });
 elements.loadMore.addEventListener("click", () => search.loadMore());
 elements.orientation.addEventListener("change", () =>

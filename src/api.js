@@ -1,9 +1,17 @@
 /**
- * @typedef {{code: string, message: string}} ApiError
- * @typedef {{ok: true, data: object} | {ok: false, error: ApiError}} ApiResult
+ * @typedef {import("./types.js").ApiError} ApiError
+ * @typedef {import("./types.js").ErrorCode} ErrorCode
+ * @typedef {import("./types.js").SearchData} SearchData
+ * @typedef {import("./types.js").Photo} Photo
  */
+/**
+ * @template T
+ * @typedef {import("./types.js").ApiResult<T>} ApiResult
+ */
+/** @param {ErrorCode} code @param {string} message @returns {{ok: false, error: ApiError}} */
 const failure = (code, message) => ({ ok: false, error: { code, message } });
 
+/** @param {string} url @param {{accessKey: string, signal?: AbortSignal, fetchImpl: typeof fetch}} options @returns {Promise<ApiResult<unknown>>} */
 async function request(url, { accessKey, signal, fetchImpl }) {
     if (!accessKey?.trim()) return failure("missing-key", "Add your Unsplash Access Key in API setup.");
     try {
@@ -26,15 +34,17 @@ async function request(url, { accessKey, signal, fetchImpl }) {
             return failure("invalid-response", "Unsplash returned an unreadable response. Please try again.");
         }
     } catch (error) {
-        return error.name === "AbortError"
+        return typeof error === "object" && error !== null && "name" in error && error.name === "AbortError"
             ? failure("aborted", "The request was cancelled.")
             : failure("network", "Could not reach Unsplash. Check your connection and try again.");
     }
 }
 
-function isPhoto(photo) {
+/** @param {unknown} value @returns {value is Photo} */
+function isPhoto(value) {
+    const photo = /** @type {Photo | null} */ (value);
     return (
-        photo &&
+        !!photo &&
         typeof photo.urls?.small === "string" &&
         typeof photo.urls?.regular === "string" &&
         typeof photo.user?.name === "string" &&
@@ -43,6 +53,13 @@ function isPhoto(photo) {
         typeof photo.links?.html === "string" &&
         typeof photo.links?.download === "string" &&
         typeof photo.links?.download_location === "string" &&
+        (photo.id === undefined || typeof photo.id === "string") &&
+        (photo.alt_description === null ||
+            photo.alt_description === undefined ||
+            typeof photo.alt_description === "string") &&
+        (photo.description === null ||
+            photo.description === undefined ||
+            typeof photo.description === "string") &&
         Number.isFinite(photo.width) &&
         photo.width > 0 &&
         Number.isFinite(photo.height) &&
@@ -50,7 +67,7 @@ function isPhoto(photo) {
     );
 }
 
-/** @returns {Promise<ApiResult>} */
+/** @param {string} query @param {import("./types.js").SearchOptions} [options] @returns {Promise<ApiResult<SearchData>>} */
 export async function fetchPhotos(
     query,
     {
@@ -76,7 +93,7 @@ export async function fetchPhotos(
         fetchImpl,
     });
     if (!result.ok) return result;
-    const data = result.data;
+    const data = /** @type {SearchData | null} */ (result.data);
     if (
         !Array.isArray(data?.results) ||
         !data.results.every(isPhoto) ||
@@ -87,10 +104,10 @@ export async function fetchPhotos(
     ) {
         return failure("invalid-response", "Unsplash returned incomplete photo data. Please try again.");
     }
-    return result;
+    return { ok: true, data };
 }
 
-/** @returns {Promise<ApiResult>} */
+/** @param {string} downloadLocation @param {{accessKey?: string, fetchImpl?: typeof fetch}} [options] @returns {Promise<ApiResult<unknown>>} */
 export async function trackDownload(downloadLocation, { accessKey = "", fetchImpl = globalThis.fetch } = {}) {
     try {
         const url = new URL(downloadLocation);

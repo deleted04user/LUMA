@@ -1,10 +1,14 @@
 import { getAccessKey, getStorage, readStored, writeStored, STORAGE } from "./config.js";
 
+/** @param {import("./types.js").AppElements} elements @param {{window?: Window, onSave: () => void}} options */
 export function initializeSettings(elements, { window = globalThis.window, onSave }) {
     const storage = getStorage(window);
+    /** @type {string | undefined} */
     let sessionKey;
+    /** @type {number | undefined} */
     let toastTimer;
     const getKey = () => sessionKey ?? getAccessKey(window.LUMA_CONFIG, storage);
+    /** @param {string} message */
     const showToast = (message) => {
         window.clearTimeout(toastTimer);
         elements.toast.textContent = message;
@@ -16,6 +20,7 @@ export function initializeSettings(elements, { window = globalThis.window, onSav
         if (!elements.settingsDialog.open) elements.settingsDialog.showModal();
         elements.accessKey.focus();
     };
+    /** @param {string} theme */
     const setTheme = (theme) => {
         const next = theme === "light" ? "light" : "dark";
         elements.document.dataset.theme = next;
@@ -32,11 +37,11 @@ export function initializeSettings(elements, { window = globalThis.window, onSav
         setTheme(elements.document.dataset.theme === "dark" ? "light" : "dark"),
     );
     elements.settingsButton.addEventListener("click", showSettings);
-    elements.settingsDialog.querySelector(".dialog-close").addEventListener("click", () => {
+    elements.closeSettings.addEventListener("click", () => {
         elements.settingsDialog.close();
     });
     elements.settingsForm.addEventListener("submit", (event) => {
-        if (event.submitter?.value !== "save") return;
+        if (event.submitter?.getAttribute("value") !== "save") return;
         event.preventDefault();
         const key = elements.accessKey.value.trim();
         if (!key) {

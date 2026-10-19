@@ -18,7 +18,7 @@
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="stylesheet" href="style.css" />
-    <script src="config.js" defer onerror="window.LUMA_CONFIG = window.LUMA_CONFIG || {}"></script>
+    <script src="config.js" defer></script>
     <script src="script.js" type="module"></script>
   </head>
   <body>
@@ -128,7 +128,7 @@
         <div class="gallery" id="search-result" aria-live="polite"></div>
         <div class="load-more-wrap">
           <button class="load-more" id="show-more-btn" type="button" hidden>
-            <span>Load more photos</span>
+            <span id="load-more-label">Load more photos</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
           </button>
         </div>
@@ -156,7 +156,7 @@
 
     <dialog class="settings-dialog" id="settings-dialog" aria-labelledby="settings-title">
       <form method="dialog" class="dialog-card" id="settings-form">
-        <button class="dialog-close" aria-label="Close settings" type="button">×</button>
+        <button class="dialog-close" id="settings-close" aria-label="Close settings" type="button">×</button>
         <p class="section-kicker">One-time setup</p>
         <h2 id="settings-title">Connect Unsplash</h2>
         <p>
