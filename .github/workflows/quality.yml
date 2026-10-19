@@ -2,19 +2,63 @@ name: Quality
 
 on:
   push:
-    branches: [main]
   pull_request:
 
 permissions:
   contents: read
 
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  smoke:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - run: npm audit --audit-level=high
+
+  browser:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
-      - run: node --check script.js
-      - run: node tests/smoke.mjs
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium firefox
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure()
+        with:
+          name: browser-failures
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: docker build -t luma-test .
+      - run: docker run --detach --name luma --publish 127.0.0.1:8000:8000 luma-test
+      - run: curl --fail --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:8000/
+      - run: curl --fail http://127.0.0.1:8000/src/api.js
+      - run: docker logs luma
+        if: failure()
+      - run: docker rm --force luma
+        if: always()
