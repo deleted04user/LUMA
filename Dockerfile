@@ -1,11 +1,11 @@
-FROM node:24-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 RUN npm run check && npm run build
 
-FROM node:24-alpine
+FROM node:26-alpine
 ENV NODE_ENV=production PORT=8000
 WORKDIR /app
 COPY --from=build /app/dist ./dist
