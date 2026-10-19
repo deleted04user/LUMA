@@ -5,9 +5,14 @@ const test = base.extend({
     pageErrors: [
         async ({ page }, use) => {
             const errors = [];
+            const policyErrors = [];
             page.on("pageerror", (error) => errors.push(error.message));
+            page.on("console", (message) => {
+                if (/content.security.policy/i.test(message.text())) policyErrors.push(message.text());
+            });
             await use(errors);
             expect(errors).toEqual([]);
+            expect(policyErrors).toEqual([]);
         },
         { auto: true },
     ],

@@ -35,7 +35,7 @@ export function createStaticServer(root, { logger = () => {} } = {}) {
                 "script-src 'self'",
                 "style-src 'self'",
                 "img-src 'self' https://images.unsplash.com https://plus.unsplash.com",
-                "connect-src https://api.unsplash.com",
+                "connect-src https://api.unsplash.com https://images.unsplash.com",
             ].join("; "),
         );
         if (!["GET", "HEAD"].includes(request.method)) {

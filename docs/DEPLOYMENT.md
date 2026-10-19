@@ -35,7 +35,7 @@ The healthcheck command exits nonzero on unavailable assets, bad responses, redi
 
 The server emits one JSON startup/error record and structured HTTP records with method, public asset/category, response status, and duration in milliseconds. It excludes query strings, private paths, headers, request bodies, and credentials. The frontend communicates failures through structured API results and accessible recovery states; it does not send user searches to an analytics service.
 
-The Node server sets a restrictive Content Security Policy, blocks framing, disables camera/microphone/geolocation, and sends no referrers. Script/style resources must be same-origin; images are limited to local assets and Unsplash image hosts; connections are limited to the Unsplash API. Inline event handlers are not used. Update the policy and tests together if new resource hosts are added.
+The Node server sets a restrictive Content Security Policy, blocks framing, disables camera/microphone/geolocation, and sends no referrers. Script/style resources must be same-origin; images are limited to local assets and Unsplash image hosts; connections are limited to the Unsplash API and the image CDN preconnect. Inline event handlers are not used. Update the policy and tests together if new resource hosts are added.
 
 ## Local Kubernetes deployment
 
