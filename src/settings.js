@@ -32,6 +32,9 @@ export function initializeSettings(elements, { window = globalThis.window, onSav
         setTheme(elements.document.dataset.theme === "dark" ? "light" : "dark"),
     );
     elements.settingsButton.addEventListener("click", showSettings);
+    elements.settingsDialog.querySelector(".dialog-close").addEventListener("click", () => {
+        elements.settingsDialog.close();
+    });
     elements.settingsForm.addEventListener("submit", (event) => {
         if (event.submitter?.value !== "save") return;
         event.preventDefault();

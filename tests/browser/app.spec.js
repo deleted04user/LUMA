@@ -55,7 +55,7 @@ test("first-run setup validates the key and enables a real UI search", async ({ 
     await expect(page.getByRole("dialog")).toBeVisible();
     await expect(page.locator("#toast")).toContainText("Enter a valid");
     await page.getByLabel("Access Key", { exact: true }).fill("browser-test-key");
-    await page.getByRole("button", { name: "Save and continue" }).click();
+    await page.getByLabel("Access Key", { exact: true }).press("Enter");
     await expect(page.getByRole("dialog")).toBeHidden();
     await expect(page.locator(".photo-card")).toHaveCount(1);
     expect(requests).toBe(1);

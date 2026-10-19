@@ -79,6 +79,9 @@ test("dismiss controls and clicks inside the dialog do not save keys", () => {
     assert.equal(elements.settingsDialog.open, true);
     assert.equal(submit(window, elements.settingsForm, "cancel"), true);
     assert.equal(submit(window, elements.settingsForm), true);
+    elements.settingsDialog.querySelector(".dialog-close").click();
+    assert.equal(elements.settingsDialog.open, false);
+    elements.settingsButton.click();
     elements.settingsDialog.click();
     assert.equal(elements.settingsDialog.open, false);
 });
