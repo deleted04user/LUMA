@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Check browser modules and the entry script with strict TypeScript/JSDoc contracts and validate required DOM controls.
+- Handle non-Error network rejections and reject malformed optional photo metadata.
+
 - Separate API, search state, rendering, configuration, and settings into testable modules.
 - Prevent stale responses from replacing a newer search and retry failed pagination without skipping a page.
 - Return structured API errors, validate response data, and restrict download tracking to Unsplash endpoints.

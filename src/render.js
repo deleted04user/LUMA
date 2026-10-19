@@ -1,3 +1,4 @@
+/** @param {string} url */
 function unsplashUrl(url) {
     try {
         const parsed = new URL(url);
@@ -8,6 +9,7 @@ function unsplashUrl(url) {
     return new URL("https://unsplash.com/");
 }
 
+/** @param {string} url */
 export function withReferral(url) {
     const parsed = unsplashUrl(url);
     parsed.searchParams.set("utm_source", "luma_search");
@@ -15,6 +17,7 @@ export function withReferral(url) {
     return parsed.toString();
 }
 
+/** @param {string} url */
 function imageUrl(url) {
     try {
         const parsed = new URL(url);
@@ -24,6 +27,7 @@ function imageUrl(url) {
     }
 }
 
+/** @param {"open" | "download"} name */
 function icon(name) {
     const paths = {
         open: '<path d="M14 5h5v5"></path><path d="M10 14 19 5"></path><path d="M19 13v6H5V5h6"></path>',
@@ -32,6 +36,7 @@ function icon(name) {
     return `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name]}</svg>`;
 }
 
+/** @param {import("./types.js").Photo} photo @param {{document?: Document, onDownload?: import("./types.js").DownloadHandler}} [options] */
 export function createPhotoCard(photo, { document = globalThis.document, onDownload = () => {} } = {}) {
     const article = document.createElement("article");
     article.className = "photo-card";
@@ -65,10 +70,12 @@ export function createPhotoCard(photo, { document = globalThis.document, onDownl
     photographer.append(avatar, name);
     const actions = document.createElement("div");
     actions.className = "photo-actions";
-    for (const [action, label] of [
+    /** @type {["open" | "download", string][]} */
+    const links = [
         ["open", "View photo on Unsplash"],
         ["download", "Download photo from Unsplash"],
-    ]) {
+    ];
+    for (const [action, label] of links) {
         const link = document.createElement("a");
         link.className = "photo-action";
         link.target = "_blank";
@@ -89,6 +96,7 @@ export function createPhotoCard(photo, { document = globalThis.document, onDownl
     return article;
 }
 
+/** @param {HTMLElement} container @param {string} title @param {string} message @param {{actionLabel?: string, onAction?: () => void}} [options] */
 export function renderStatus(container, title, message, { actionLabel = "", onAction } = {}) {
     const document = container.ownerDocument;
     const art = document.createElement("div");
@@ -100,7 +108,7 @@ export function renderStatus(container, title, message, { actionLabel = "", onAc
     const body = document.createElement("p");
     body.textContent = message;
     container.replaceChildren(art, heading, body);
-    if (actionLabel) {
+    if (actionLabel && onAction) {
         const action = document.createElement("button");
         action.className = "secondary-button";
         action.type = "button";
@@ -111,6 +119,7 @@ export function renderStatus(container, title, message, { actionLabel = "", onAc
     container.hidden = false;
 }
 
+/** @param {HTMLElement} gallery */
 export function renderSkeletons(gallery) {
     const document = gallery.ownerDocument;
     gallery.replaceChildren(
@@ -123,14 +132,17 @@ export function renderSkeletons(gallery) {
     );
 }
 
+/** @param {import("./types.js").AppElements} elements @param {{onSettings: () => void, onDownload: import("./types.js").DownloadHandler}} handlers */
 export function createRenderer(elements, { onSettings, onDownload }) {
+    /** @type {import("./types.js").Photo[] | undefined} */
     let previousPhotos;
+    /** @param {import("./types.js").SearchState} state */
     return (state) => {
         const { gallery, status, loadMore, resultsTitle, filters } = elements;
         gallery.setAttribute("aria-busy", String(state.loading));
         loadMore.disabled = state.loading;
         loadMore.setAttribute("aria-busy", String(state.loading));
-        loadMore.querySelector("span").textContent =
+        elements.loadMoreLabel.textContent =
             state.loading && state.append ? "Loading photos…" : "Load more photos";
         loadMore.hidden = !state.page || state.page >= state.totalPages;
         status.hidden = true;

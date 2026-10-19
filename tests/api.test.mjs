@@ -82,6 +82,19 @@ test("network failures and aborts become explicit results", async () => {
     }
 });
 
+test("non-Error fetch rejections remain safe structured failures", async () => {
+    for (const rejection of [null, undefined, "offline"]) {
+        const result = await fetchPhotos("sea", {
+            accessKey,
+            fetchImpl: async () => {
+                throw rejection;
+            },
+        });
+        assert.equal(result.ok, false);
+        assert.equal(result.error.code, "network");
+    }
+});
+
 test("invalid JSON and incomplete photo/search data cannot reach the renderer", async () => {
     const invalidJson = await fetchPhotos("sea", {
         accessKey,
@@ -100,6 +113,7 @@ test("invalid JSON and incomplete photo/search data cannot reach the renderer", 
         { results: [], total: 0, total_pages: 0.5 },
         { results: [{}], total: 1, total_pages: 1 },
         { results: [photo("bad", { width: 0 })], total: 1, total_pages: 1 },
+        { results: [photo("bad", { alt_description: 42 })], total: 1, total_pages: 1 },
     ]) {
         const result = await fetchPhotos("sea", { accessKey, fetchImpl: async () => response(data) });
         assert.equal(result.error.code, "invalid-response");

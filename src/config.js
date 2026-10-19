@@ -3,6 +3,7 @@ export const STORAGE = {
     theme: "luma-theme",
 };
 
+/** @param {Pick<Window, "localStorage">} window */
 export function getStorage(window) {
     try {
         return window.localStorage;
@@ -11,6 +12,7 @@ export function getStorage(window) {
     }
 }
 
+/** @param {Pick<Storage, "getItem"> | null} storage @param {string} key */
 export function readStored(storage, key) {
     try {
         return storage?.getItem(key) || "";
@@ -19,6 +21,7 @@ export function readStored(storage, key) {
     }
 }
 
+/** @param {Pick<Storage, "setItem" | "removeItem"> | null} storage @param {string} key @param {string} value */
 export function writeStored(storage, key, value) {
     try {
         if (!storage) return false;
@@ -30,6 +33,7 @@ export function writeStored(storage, key, value) {
     }
 }
 
+/** @param {import("./types.js").LumaConfig | null} [config] @param {Pick<Storage, "getItem"> | null} [storage] */
 export function getAccessKey(config = {}, storage = null) {
     const configured = config?.UNSPLASH_ACCESS_KEY;
     return (

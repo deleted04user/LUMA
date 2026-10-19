@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { JSDOM } from "jsdom";
+import { getElements } from "../src/dom.js";
 
 const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
 
@@ -13,22 +14,7 @@ export function createDom({ preferred = "dark" } = {}) {
         return timers.length;
     };
     window.clearTimeout = () => {};
-    const elements = { document: window.document.documentElement };
-    for (const [name, id] of Object.entries({
-        gallery: "search-result",
-        status: "status-panel",
-        loadMore: "show-more-btn",
-        resultsTitle: "results-title",
-        filters: "filters",
-        themeToggle: "theme-toggle",
-        settingsButton: "settings-button",
-        settingsDialog: "settings-dialog",
-        settingsForm: "settings-form",
-        accessKey: "access-key",
-        clearKey: "clear-key",
-        toast: "toast",
-    }))
-        elements[name] = window.document.getElementById(id);
+    const elements = getElements(window.document);
     elements.settingsDialog.showModal = () => {
         elements.settingsDialog.open = true;
     };
