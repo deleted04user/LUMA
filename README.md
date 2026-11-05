@@ -12,6 +12,8 @@ Search photographs through a responsive, accessible interface built with plain H
 
 </div>
 
+**Explore:** [Live demo](https://deleted04user.github.io/LUMA/) · [Setup](#getting-started) · [Configuration](#configuration) · [Verification](#verification) · [Deployment](#container)
+
 ## Project type
 
 LUMA is a **frontend static web application** written in HTML, CSS, and browser JavaScript. It is not an infrastructure library or a backend API. Optional Docker Compose and Kubernetes manifests deploy the same static frontend. Photo search runs in the browser against Unsplash; no database, server-side application credentials, or backing services are required.
@@ -136,10 +138,14 @@ Review [Unsplash's API documentation](https://unsplash.com/documentation) and gu
 
 ## Contributing and history
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the validation workflow and [CHANGELOG.md](CHANGELOG.md) for changes. Keep real fixes and the tests proving them together in focused commits. Sustained maintenance and collaboration require actual work over time; this tooling cannot guarantee an assessment score or payout.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the validation workflow and [CHANGELOG.md](CHANGELOG.md) for changes. Keep real fixes and the tests proving them together in focused commits.
 
 ## Credits and license
 
 Photography and search data are provided by [Unsplash](https://unsplash.com/?utm_source=luma_search&utm_medium=referral). Luma is an educational frontend project and is not affiliated with Unsplash.
 
 Released under the [MIT License](LICENSE).
+
+---
+
+[Oussama Oulkaid · GitHub profile](https://github.com/deleted04user) · [Explore the project portfolio](https://github.com/deleted04user/deleted04user/blob/main/PORTFOLIO.md)
